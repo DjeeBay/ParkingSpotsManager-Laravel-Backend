@@ -10,6 +10,6 @@ class User extends Authenticatable
 
     public function parkings()
     {
-        return $this->hasManyThrough(Parking::class, UsersParking::class, 'userid', 'id');
+        return $this->hasManyThrough(Parking::class, UsersParking::class, 'userid', 'id', 'id', 'parkingid');
     }
 }

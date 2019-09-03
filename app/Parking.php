@@ -26,7 +26,7 @@ class Parking extends Model
 
     public function users()
     {
-        return $this->hasManyThrough(User::class, UsersParking::class, 'parkingid', 'id');
+        return $this->hasManyThrough(User::class, UsersParking::class, 'parkingid', 'id', 'id', 'userid');
     }
 
     public function usersParkings()
