@@ -11,7 +11,7 @@ class Parking extends Model
 
     public function getIsCurrentUserAdminAttribute()
     {
-        $userParking = $this->usersParkings()
+        $userParking = $this->userParkings()
             ->where('parkingid', '=', $this->id)
             ->where('userid', '=', Auth::user()->id)
             ->first();
@@ -29,7 +29,7 @@ class Parking extends Model
         return $this->hasManyThrough(User::class, UsersParking::class, 'parkingid', 'id', 'id', 'userid');
     }
 
-    public function usersParkings()
+    public function userParkings()
     {
         return $this->hasMany(UsersParking::class, 'parkingid', 'id');
     }
@@ -41,7 +41,7 @@ class Parking extends Model
 
     private function getUserParking()
     {
-        return $this->usersParkings()
+        return $this->userParkings()
             ->where('parkingid', '=', $this->id)
             ->where('userid', '=', Auth::user()->id)
             ->first();

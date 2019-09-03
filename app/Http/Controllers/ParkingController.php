@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ParkingController extends Controller
 {
+    public function get(Request $request, $id)
+    {
+        $parking = Parking::with(['spots.occupier', 'userparkings.user'])->find($id);
+        if ($parking) {
+            return response()->json($parking);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
     public function getUserParkings()
     {
         $parkings = $this->getParkingsOfCurrentUser();
