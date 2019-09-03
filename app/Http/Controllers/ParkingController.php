@@ -8,7 +8,6 @@ use App\UsersParking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class ParkingController extends Controller
@@ -54,6 +53,23 @@ class ParkingController extends Controller
         if ($parking && $userParking && $parking->iscurrentuseradmin && $request->UserId !== Auth::user()->id) {
             $userParking->isadmin = $request->IsAdmin;
             $userParking->save();
+
+            return response()->json(UsersParking::with('user')->where('parkingid', '=', $parkingID)->get());
+        }
+
+        return response()->json('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function removeUser($parkingID, $userID)
+    {
+        $userParking = UsersParking::where([
+            ['parkingid', '=', $parkingID],
+            ['userid', '=', $userID],
+        ])
+            ->first();
+        $parking = Parking::find($parkingID);
+        if ($userParking && $parking && $parking->iscurrentuseradmin && intval($userID) !== Auth::user()->id) {
+            $userParking->delete();
 
             return response()->json(UsersParking::with('user')->where('parkingid', '=', $parkingID)->get());
         }
