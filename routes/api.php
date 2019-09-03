@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::middleware(['json-response', 'api'])->group(function () {
     Route::post('/account/CreateUser', 'AccountController@createUser');
-    Route::get('/users/me', 'UserController@me');
+    Route::post('/account/Login', 'AccountController@login');
+    Route::get('/users/Me', 'UserController@me');
 });

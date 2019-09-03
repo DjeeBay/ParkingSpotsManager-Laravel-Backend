@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Response;
 
-class ApiRequest extends FormRequest
+class LoginRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,12 +24,8 @@ class ApiRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'login' => 'required|string',
+            'password' => 'required|string'
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw (new HttpResponseException(response($validator->errors()->toJson(), Response::HTTP_BAD_REQUEST)));
     }
 }
