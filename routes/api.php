@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::middleware(['json-response', 'api'])->group(function () {
     Route::post('/account/CreateUser', 'AccountController@createUser');
-    Route::post('/account/Login', 'AccountController@login');
-    Route::get('/users/Me', 'UserController@me');
+    Route::post('/account/Login', 'AccountController@login')->name('login');
+    Route::get('/users/me', 'UserController@me');
+
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/parkings/GetUserParkings', 'ParkingController@getUserParkings');
+    });
 });

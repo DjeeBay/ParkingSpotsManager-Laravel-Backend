@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -13,6 +14,6 @@ class UserController extends Controller
             return response()->json($user);
         }
 
-        return response('Not Found', 404);
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
     }
 }
