@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,8 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::middleware(['json-response', 'api'])->group(function () {
+    Route::post('/account/CreateUser', 'AccountController@createUser');
+    Route::get('/users/me', 'UserController@me');
 });
