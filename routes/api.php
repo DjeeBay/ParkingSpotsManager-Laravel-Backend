@@ -23,6 +23,8 @@ Route::middleware(['json-response', 'api'])->group(function () {
     Route::get('/users/me', 'UserController@me');
 
     Route::middleware('auth:api')->group(function () {
+        Route::get('/users/GetInvitableUsers/{parkingID}/{search}', 'UserController@getInvitableUsers');
+
         Route::get('/parkings/GetUserParkings', 'ParkingController@getUserParkings');
         Route::get('/parkings/Leave/{parkingID}', 'ParkingController@leave');
         Route::post('/parkings/ChangeUserRole/{parkingID}', 'ParkingController@changeUserRole');
@@ -31,6 +33,7 @@ Route::middleware(['json-response', 'api'])->group(function () {
         Route::put('/parkings/{id}', 'ParkingController@update');
         Route::get('/parkings/GetUserList/{parkingID}/{search}', 'ParkingController@getUserList');
         Route::post('/parkings', 'ParkingController@store');
+        Route::get('/parkings/SendInvitation/{parkingID}/{userID}', 'ParkingController@sendInvitation');
 
         Route::get('/spots/GetParkingSpots/{parkingID}', 'SpotController@getParkingSpots');
         Route::get('/spots/{id}', 'SpotController@get');

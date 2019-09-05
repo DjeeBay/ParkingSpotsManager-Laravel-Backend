@@ -6,6 +6,7 @@ use App\Http\Requests\ParkingChangeUserRoleRequest;
 use App\Http\Requests\ParkingCreateRequest;
 use App\Http\Requests\ParkingUpdateRequest;
 use App\Parking;
+use App\User;
 use App\UsersParking;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -115,6 +116,23 @@ class ParkingController extends Controller
             $userParking->delete();
 
             return response()->json(UsersParking::with('user')->where('parkingid', '=', $parkingID)->get());
+        }
+
+        return response()->json('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function sendInvitation(Request $request, $parkingID, $userID)
+    {
+        $parking = Parking::find($parkingID);
+        $user = User::find($userID);
+        if ($parking && $user && !UsersParking::where([['parkingid', '=', $parking->id], ['userid', '=', $user->id]])->first()) {
+            $userParking = new UsersParking();
+            $userParking->parkingid = $parking->id;
+            $userParking->userid = $user->id;
+            $userParking->isadmin = false;
+            $userParking->save();
+
+            return response()->json(true);
         }
 
         return response()->json('Bad Request', Response::HTTP_BAD_REQUEST);
