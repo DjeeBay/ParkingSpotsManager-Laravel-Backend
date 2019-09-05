@@ -55,7 +55,7 @@ class AccountController extends Controller
             $user->lastname = $request->Lastname;
             $user->email = $request->Email;
             if ($request->Password && strlen($request->Password)) {
-                $user->password = bcrypt($request->Password);
+                $user->password = Hash::make($request->Password);
             }
             $user->save();
 
