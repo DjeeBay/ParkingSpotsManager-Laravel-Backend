@@ -30,6 +30,7 @@ Route::middleware(['json-response', 'api'])->group(function () {
         Route::get('/parkings/RemoveUser/{parkingID}/{userID}', 'ParkingController@removeUser');
         Route::put('/parkings/{id}', 'ParkingController@update');
         Route::get('/parkings/GetUserList/{parkingID}/{search}', 'ParkingController@getUserList');
+        Route::post('/parkings', 'ParkingController@store');
 
         Route::get('/spots/GetParkingSpots/{parkingID}', 'SpotController@getParkingSpots');
         Route::get('/spots/{id}', 'SpotController@get');

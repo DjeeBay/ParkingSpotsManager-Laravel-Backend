@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ParkingChangeUserRoleRequest;
+use App\Http\Requests\ParkingCreateRequest;
 use App\Http\Requests\ParkingUpdateRequest;
 use App\Parking;
 use App\UsersParking;
@@ -36,6 +37,21 @@ class ParkingController extends Controller
             return response()->json($parking);
         }
         return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function store(ParkingCreateRequest $request)
+    {
+        $parking = new Parking();
+        $parking->name = $request->Name;
+        $parking->save();
+
+        $userParking = new UsersParking();
+        $userParking->parkingid = $parking->id;
+        $userParking->userid = Auth::user()->id;
+        $userParking->isadmin = true;
+        $userParking->save();
+
+        return response()->json($parking);
     }
 
     public function getUserParkings()

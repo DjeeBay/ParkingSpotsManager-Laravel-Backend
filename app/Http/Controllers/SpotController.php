@@ -60,7 +60,6 @@ class SpotController extends Controller
         }
 
         return response('Bad Request', Response::HTTP_BAD_REQUEST);
-
     }
 
     public function delete(Request $request, $id)
