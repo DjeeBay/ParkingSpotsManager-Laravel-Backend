@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ParkingChangeUserRoleRequest;
+use App\Http\Requests\ParkingUpdateRequest;
 use App\Parking;
 use App\UsersParking;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,6 +20,21 @@ class ParkingController extends Controller
             return response()->json($parking);
         }
 
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function update(ParkingUpdateRequest $request, $id)
+    {
+        $parking = Parking::find($id);
+        if ($parking && $parking->iscurrentuseradmin) {
+            $parking->name = $request->Name;
+            $parking->address = $request->Address;
+            $parking->latitude = $request->Latitude;
+            $parking->longitude = $request->Longitude;
+            $parking->save();
+
+            return response()->json($parking);
+        }
         return response('Bad Request', Response::HTTP_BAD_REQUEST);
     }
 

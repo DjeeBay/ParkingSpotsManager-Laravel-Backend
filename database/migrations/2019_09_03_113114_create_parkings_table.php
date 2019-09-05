@@ -17,8 +17,8 @@ class CreateParkingsTable extends Migration
             $table->bigIncrements('id');
             $table->text('name');
             $table->text('address')->nullable();
-            $table->float('latitude')->nullable();
-            $table->float('longitude')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
