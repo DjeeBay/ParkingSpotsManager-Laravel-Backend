@@ -23,6 +23,8 @@ Route::middleware(['json-response', 'api'])->group(function () {
     Route::get('/users/me', 'UserController@me');
 
     Route::middleware('auth:api')->group(function () {
+        Route::post('/account/UpdateUser', 'AccountController@updateUser');
+
         Route::get('/users/GetInvitableUsers/{parkingID}/{search}', 'UserController@getInvitableUsers');
 
         Route::get('/parkings/GetUserParkings', 'ParkingController@getUserParkings');
