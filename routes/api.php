@@ -38,5 +38,6 @@ Route::middleware(['json-response', 'api'])->group(function () {
         Route::put('/spots/{id}/ChangeStatus', 'SpotController@changeStatus');
         Route::put('/spots/{id}', 'SpotController@update');
         Route::delete('/spots/{id}', 'SpotController@delete');
+        Route::post('/spots', 'SpotController@store');
     });
 });

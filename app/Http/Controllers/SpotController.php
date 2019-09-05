@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SpotChangeStatusRequest;
+use App\Http\Requests\SpotCreateRequest;
 use App\Http\Requests\SpotUpdateRequest;
 use App\Parking;
 use App\Spot;
@@ -43,6 +44,23 @@ class SpotController extends Controller
         }
 
         return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function store(SpotCreateRequest $request)
+    {
+        $parking = Parking::find($request->ParkingId);
+        if ($parking && $parking->iscurrentuseradmin) {
+            $spot = new Spot();
+            $spot->name = $request->Name;
+            $spot->parkingid = $request->ParkingId;
+            $spot->isoccupiedbydefault = false;
+            $spot->save();
+
+            return response()->json($spot);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+
     }
 
     public function delete(Request $request, $id)
