@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Parking extends Model
 {
+    use SoftDeletes;
+
     protected $appends = ['iscurrentuseradmin', 'isparkinguser'];
 
     public function getIsCurrentUserAdminAttribute()

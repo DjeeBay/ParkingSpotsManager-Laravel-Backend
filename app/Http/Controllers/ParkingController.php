@@ -45,6 +45,17 @@ class ParkingController extends Controller
         return response()->json($parkings);
     }
 
+    public function getUserList(Request $request, $parkingID, $search)
+    {
+        $parking = Parking::find($parkingID);
+        if ($parking && $search && strlen($search) >= 3) {
+            return response()->json($parking->users->filter(function ($user) use ($search) {
+                return stristr($user->username, $search);
+            }));
+        }
+        return response()->json('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
     public function leave(Request $request, $parkingID)
     {
         $parking = Parking::find($parkingID);

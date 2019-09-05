@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SpotChangeStatusRequest;
+use App\Http\Requests\SpotUpdateRequest;
+use App\Parking;
 use App\Spot;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,6 +17,71 @@ class SpotController extends Controller
     public function getParkingSpots(Request $request, $parkingID)
     {
         return response()->json($this->getSpotsOfAGivenParking($parkingID));
+    }
+
+    public function get(Request $request, $id)
+    {
+        if ($spot = Spot::find($id)) {
+            return response()->json($spot);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function update(SpotUpdateRequest $request, $id)
+    {
+        $spot = Spot::find($id);
+        if ($spot && $spot->iscurrentuseradmin) {
+            $spot->name = $request->Name;
+            $spot->isoccupiedbydefault = $request->IsOccupiedByDefault;
+            if (!$request->IsOccupiedByDefault) {
+                $spot->occupiedbydefaultby = null;
+            }
+            $spot->save();
+
+            return response()->json($spot);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $spot = Spot::find($id);
+        if ($spot && $spot->iscurrentuseradmin) {
+            $spot->delete();
+
+            return response('Spot deleted.');
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function getDefaultOccupier(Request $request, $id)
+    {
+        $spot = Spot::find($id);
+        if ($spot && $spot->isoccupiedbydefault && $spot->occupiedbydefaultby && $user = User::find($spot->occupiedbydefaultby)) {
+            return response()->json($user);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function setDefaultOccupier(Request $request, $spotID, $userID)
+    {
+        $spot = Spot::find($spotID);
+        $user = User::find($userID);
+        if ($spot && $spot->iscurrentuseradmin && $user) {
+            $spot->isoccupiedbydefault = true;
+            $spot->occupiedbydefaultby = $user->id;
+            $spot->occupiedby = $user->id;
+            $spot->occupiedat = Carbon::now();
+            $spot->save();
+
+            return response()->json($spot);
+        }
+
+        return response('Bad Request', Response::HTTP_BAD_REQUEST);
     }
 
     public function changeStatus(SpotChangeStatusRequest $request, $id)
