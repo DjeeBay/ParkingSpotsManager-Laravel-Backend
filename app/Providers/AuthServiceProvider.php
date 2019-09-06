@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -25,6 +28,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Auth::viaRequest('authtoken', function (Request $request) {
+            return User::whereNotNull('authtoken')->where('authtoken', '=', $request->bearerToken())->first();
+        });
     }
 }
