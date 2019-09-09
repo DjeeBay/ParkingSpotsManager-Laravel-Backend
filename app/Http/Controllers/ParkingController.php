@@ -68,7 +68,7 @@ class ParkingController extends Controller
         if ($parking && $search && strlen($search) >= 3) {
             return response()->json($parking->users->filter(function ($user) use ($search) {
                 return stristr($user->username, $search);
-            }));
+            })->values());
         }
         return response()->json('Bad Request', Response::HTTP_BAD_REQUEST);
     }
